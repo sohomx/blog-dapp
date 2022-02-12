@@ -4,7 +4,7 @@ const { SystemProgram } = anchor.web3;
 async function createUser(program, provider) {
     const userAccount  = anchor.web3.Keypair.generate();
 
-    const name = "sohom";
+    const name = "name";
     const avatar = "https://img.link";
 
     await program.rpc.signupUser(name, avatar, {
