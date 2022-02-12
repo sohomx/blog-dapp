@@ -1,17 +1,26 @@
-import * as anchor from '@project-serum/anchor';
-import { Program } from '@project-serum/anchor';
-import { Blog } from '../target/types/blog';
+const anchor = require("@project-serum/anchor");
+const assert = require("assert");
 
-describe('blog', () => {
+describe("blog tests", () => {
+  const provider = anchor.Provider.env();
+  anchor.setProvider(provider);
+  const program = anchor.workspace.BlogSol;
 
-  // Configure the client to use the local cluster.
-  anchor.setProvider(anchor.Provider.env());
+  it("initialize blog account", async () => {
+    // call the utiility function
+    const { blog, blogAccount, genesisPostAccount } = await createBlog (
+      program,
+      provider
+    );
 
-  const program = anchor.workspace.Blog as Program<Blog>;
+    assert.equal(
+      blog.currentPostKey.toString(),
+      genesisPostAccount.publicKey.toString()
+    );
 
-  it('Is initialized!', async () => {
-    // Add your test here.
-    const tx = await program.rpc.initialize({});
-    console.log("Your transaction signature", tx);
+    assert.equal(
+      blog.authority.toString(),
+      provider.wallet.publicKey.toString()
+    );
   });
 });
